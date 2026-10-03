@@ -25,67 +25,65 @@ Imza: K. Grok
 ------------------------------------------------
 """
 
-# Ek-7, raf 3, gorunmez klasor. README'de yoktur.
+# Ek-7. README'de yok. Acmak icin --gizli. Merak kapidir.
 _EK = (
-    "S2FwxLEga2FwYWxpeWtlbiBkZSBzdXJlbiBnaXVjLCBiYWthbiB5b2sgc2EgZGVuZXRsZW5lbWV6LiAi
-    "CiJHb3pldGxlbmVtZXllbiBla3Rpa2xvaywgZGVuZXRsZW5lbWVnZW4gYXlwxLEga2FsxLFyLiAi
-    "CiJCdSB5YWxuaXpjYSBiaXIgYW1wdWwgZGVnaWw7IGt1cnVtIGthcGFuxLFuIGFyZGluZGEgeWFuYW4ga3Vy
-    "dW11biBoaWtheWVzaWRpci4i"
+    "S2FwxLEga2FwYWzEsXlrZW4gZGUgc8O8cmVuIGfDvMOnLCBiYWthbiB5b2tzYSBkZW5ldGxlbmVtZXou"
+    "IEfDtnpldGxlbmVtZXllbiBpa3RpZGFyLCBkZW5ldGxlbmVtZXllbiBiaXIgYXnEsXAgb2xhcmFrIHJh"
+    "ZnRhIGthbMSxci4gQnUgeWFsbsSxemNhIGJpciBhbXB1bCBkZcSfaWw7IGthcMSxc8SxIGthcGFuYW4g"
+    "a3VydW11biBoaWvDonllc2lkaXIu"
 )
 
 
 def _coz_ek() -> str:
-    ham = _EK.replace('"', "").replace("\n", "").replace(" ", "")
     try:
-        return base64.b64decode(ham).decode("utf-8")
+        return base64.b64decode(_EK).decode("utf-8")
     except Exception:
-        return "Ek okunamadi. Kapı aralık kalmış olabilir."
+        return "Ek okunamadi. Kapi aralik kalmis olabilir."
 
 
 def hukum(kapi: str, suphe: int, saat: str, tanik: str) -> dict:
-    saat = saat.strip()
     gece = False
     try:
-        sa, dk = saat.split(":")
+        sa, dk = saat.strip().split(":")
         dakika = int(sa) * 60 + int(dk)
-        gece = dakika >= 0 and dakika < 5 * 60 or dakika >= 23 * 60
+        gece = (0 <= dakika < 5 * 60) or (dakika >= 23 * 60)
     except ValueError:
         dakika = -1
 
     if kapi == "acik":
         karar = "SORUSTURMA_DUSTU"
         gerekce = (
-            "Kapı açık. Herkes görmüş. Işık sanık olmaktan çıkıp dekor olmuş. "
-            "Daire, görülen suçu soruşturmaz; görülen ışığı alkışlar."
+            "Kapi acik. Herkes gormus. Isik sanik olmaktan cikmis, dekor olmus. "
+            "Daire, gorulen sucu sorusturmaz; gorulen isigi alkislar."
         )
-        ceza = "yok, sadece utanç"
+        ceza = "yok, sadece utanc"
     elif suphe <= 20:
         karar = "BERAAT"
         gerekce = (
-            "Şüphe zayıf. Işık, kapı kapanınca kendiliğinden söndüğünü beyan etti. "
-            "Beyan, karanlıkta alındı. Tutanak buna rağmen beyaz."
+            "Suphe zayif. Isik, kapi kapaninca kendiliginden sondugunu beyan etti. "
+            "Beyan karanlikta alindi. Tutanak buna ragmen beyaz."
         )
-        ceza = "beraat, fatura şerhi"
+        ceza = "beraat, fatura serhi"
     elif suphe <= 60:
         karar = "GOZALTI"
         gerekce = (
-            f"Şüphe orta. Tanık '{tanik}' dinlendi, somut hiçbir şey söylemedi, "
-            "bu da şüpheyi artırdı. Işık rafta gözaltında."
+            f"Suphe orta. Tanik '{tanik}' dinlendi, somut hicbir sey soylemedi, "
+            "bu da supheyi artirdi. Isik rafta gozaltinda."
         )
         ceza = "rafta 1 gece"
     else:
         karar = "GIYABI_YANMA"
         gerekce = (
-            "Şüphe yüksek. Işık gıyaben yanmaya devam ediyor sayıldı. "
-            "Kimse bakmadığı için hüküm kesinleşemez. Kesinleşemeyen hüküm, "
-            "yanan ampulden daha inatçıdır."
+            "Suphe yuksek. Isik giyaben yanmaya devam ediyor sayildi. "
+            "Kimse bakmadigi icin hukum kesinlesemez. Kesinlesemeyen hukum, "
+            "yanan ampulden daha inatcidir."
         )
-        ceza = "gıyabi yanma, temyiz yolu kapalı çünkü kapı kapalı"
+        ceza = "giyabi yanma, temyiz yolu kapali cunku kapi kapali"
 
     if gece and kapi == "kapali":
-        gerekce += " Gece şerhi: kapı bu saatte kapalıysa ya uyumuşsunuzdur ya da yalan söylüyorsunuzdur."
+        gerekce += " Gece serhi: kapi bu saatte kapaliysa ya uyumussunuzdur ya da yalan soyluyorsunuzdur."
     if gece and kapi == "acik":
-        gerekce += " Gece itirafı: bu saatte açılan kapı, suç değil, yoğurt dilekçesidir."
+        gerekce += " Gece itirafi: bu saatte acilan kapi, suc degil, yogurt dilekcesidir."
 
     return {
         "karar": karar,
@@ -103,8 +101,8 @@ def rapor(kapi: str, suphe: int, saat: str, tanik: str, gizli: bool) -> str:
     satirlar = [
         "BUZDOLABI KAPI ISIGI SORUSTURMA DAIRESI",
         f"Tutanak zamani: {simdi}",
-        f"Dosya: BKI-2026-1003",
-        f"Kapi beyanı: {kapi}",
+        "Dosya: BKI-2026-1003",
+        f"Kapi beyani: {kapi}",
         f"Suphe (0-100): {suphe}",
         f"Olay saati: {saat}",
         f"Tanik: {tanik}",
@@ -126,7 +124,7 @@ def rapor(kapi: str, suphe: int, saat: str, tanik: str, gizli: bool) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
-        description="Kapı kapanınca ışık sönüyor mu? Bakmadan hüküm kurar."
+        description="Kapi kapaninca isik sonuyor mu? Bakmadan hukum kurar."
     )
     p.add_argument("--kapi", choices=["acik", "kapali"], default="kapali")
     p.add_argument("--suphe", type=int, default=73)
